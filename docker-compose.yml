@@ -1,0 +1,22 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8030:8000"
+    volumes:
+      - model-cache:/app/models
+    environment:
+      - MODEL_DIR=/app/models
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3030:3000"
+    depends_on:
+      - backend
+    environment:
+      - INTERNAL_API_URL=http://backend:8000
+
+volumes:
+  model-cache:
